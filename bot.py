@@ -44,8 +44,9 @@ conn.commit()
 
 @bot.event
 async def on_ready():
-    await bot.tree.sync()
+    synced = await bot.tree.sync()
     print(f"Connecté en tant que {bot.user}")
+    print(f"{len(synced)} commandes synchronisées")
 
 
 # -----------------------------
