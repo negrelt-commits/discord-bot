@@ -392,8 +392,7 @@ async def top3(
         )
 
 
-    conn.commit()
-
+        conn.commit()
 
     embed = discord.Embed(
         title=f"💌 TOP 3 DE {interaction.user.name}",
@@ -406,18 +405,17 @@ async def top3(
         color=discord.Color.gold()
     )
 
-
     TOP3_CHANNEL_ID = 1524038773955100742
 
-channel = bot.get_channel(TOP3_CHANNEL_ID)
+    channel = bot.get_channel(TOP3_CHANNEL_ID)
 
-if channel is not None:
-    await channel.send(embed=embed)
+    if channel is not None:
+        await channel.send(embed=embed)
 
-await interaction.response.send_message(
-    "💌 Ton Top 3 a été publié dans #top-des-lectures !",
-    ephemeral=True
-)
+    await interaction.response.send_message(
+        "💌 Ton Top 3 a été publié dans #top-des-lecteurs !",
+        ephemeral=True
+    )
     
 # -----------------------------
 # LANCEMENT
