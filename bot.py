@@ -113,11 +113,14 @@ async def read(interaction: discord.Interaction, titre: str):
 # PROFIL
 # -----------------------------
 
+# -----------------------------
+# PROFIL
+# -----------------------------
+
 @bot.tree.command(name="profil", description="Voir ton profil de lecteur")
 async def profil(interaction: discord.Interaction):
 
     user_id = str(interaction.user.id)
-
 
     c.execute(
         """
@@ -128,7 +131,6 @@ async def profil(interaction: discord.Interaction):
     )
 
     total = c.fetchone()[0]
-
 
     c.execute(
         """
@@ -144,41 +146,30 @@ async def profil(interaction: discord.Interaction):
 
     dernier_livre = dernier[0] if dernier else "Aucun"
 
-
     if total < 5:
-        niveau = "🐚 Baby lectrice"
+        niveau = "🐚 Nouveau lecteur"
 
     elif total < 20:
-        niveau = "🌊 Dévoreuse de livres"
+        niveau = "🌊 Dévoreuse de livre"
 
     elif total < 50:
-        niveau = "🪸 Lectrice passionné"
+        niveau = "🪸 Lectrice passionée"
 
     elif total < 100:
-        niveau = "🐙 Bibliothécaire"
+        niveau = "🐙 Bibliothéquaire"
 
     else:
         niveau = "🌅 Légende littéraire"
 
-
-       podium = (
-        f"```text\n"
-        f"              🥇\n"
-        f"           {livre1}\n"
-        f"\n"
-        f"🥈 {livre2}        🥉 {livre3}\n"
-        f"```"
-    )
-
     embed = discord.Embed(
-        title=f"💌 Top 3 de {interaction.user.name}",
+        title=f"💌 Profil lecteur de {interaction.user.name}",
         description=(
-            f"{podium}\n"
-            f"📅 Partagé le {date}"
+            f"📚 Livres lus : **{total}**\n\n"
+            f"🏅 Niveau : **{niveau}**\n\n"
+            f"📌 Dernière lecture : **{dernier_livre}**"
         ),
         color=discord.Color.gold()
     )
-
 
     await interaction.response.send_message(embed=embed)
 
