@@ -91,7 +91,7 @@ async def read(interaction: discord.Interaction, titre: str):
         description=(
             f"Bravo {interaction.user.mention} 🎉\n\n"
             f"📚 Livre ajouté : **{titre}**\n"
-            f"📊 Total de livres lus : **{total}**"
+            f"✨ Total de livres lus : **{total}**"
         )
     )
 
@@ -135,24 +135,27 @@ async def profil(interaction: discord.Interaction):
 
 
     if total < 5:
-        niveau = "🌱 Nouveau lecteur"
+        niveau = "🐚 Baby lectrice"
 
     elif total < 20:
-        niveau = "📖 Lecteur régulier"
+        niveau = "🌊 Dévoreuse de livres"
 
     elif total < 50:
-        niveau = "🔥 Lecteur passionné"
+        niveau = "🪸 Lectrice passionné"
+
+    elif total < 100:
+        niveau = "🐙 Bibliothécaire"
 
     else:
-        niveau = "🏆 Maître lecteur"
+        niveau = "🌅 Légende littéraire"
 
 
     embed = discord.Embed(
-        title=f"📚 Profil lecteur de {interaction.user.name}",
+        title=f"💌 Profil lecteur de {interaction.user.name}",
         description=(
             f"📖 Livres lus : **{total}**\n\n"
             f"🏅 Niveau : **{niveau}**\n\n"
-            f"📌 Dernière lecture : **{dernier_livre}**"
+            f"🧸 Dernière lecture : **{dernier_livre}**"
         )
     )
 
