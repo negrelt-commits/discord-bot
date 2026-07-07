@@ -147,7 +147,7 @@ async def profil(interaction: discord.Interaction):
     dernier_livre = dernier[0] if dernier else "Aucun"
 
     if total < 5:
-        niveau = "🐚 Nouveau lecteur"
+        niveau = "🐚 Baby lectrice"
 
     elif total < 20:
         niveau = "🌊 Dévoreuse de livre"
@@ -367,13 +367,11 @@ async def top3(
         )
         return
 
-
     livres = [
         (1, livre1),
         (2, livre2),
         (3, livre3)
     ]
-
 
     for place, livre in livres:
         c.execute(
@@ -391,8 +389,7 @@ async def top3(
             )
         )
 
-
-            conn.commit()
+    conn.commit()
 
     podium = (
         "```text\n"
