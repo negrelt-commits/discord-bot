@@ -161,13 +161,22 @@ async def profil(interaction: discord.Interaction):
         niveau = "🌅 Légende littéraire"
 
 
+       podium = (
+        f"```text\n"
+        f"              🥇\n"
+        f"           {livre1}\n"
+        f"\n"
+        f"🥈 {livre2}        🥉 {livre3}\n"
+        f"```"
+    )
+
     embed = discord.Embed(
-        title=f"💌 Profil lecteur de {interaction.user.name}",
+        title=f"💌 Top 3 de {interaction.user.name}",
         description=(
-            f"📖 Livres lus : **{total}**\n\n"
-            f"🏅 Niveau : **{niveau}**\n\n"
-            f"🧸 Dernière lecture : **{dernier_livre}**"
-        )
+            f"{podium}\n"
+            f"📅 Partagé le {date}"
+        ),
+        color=discord.Color.gold()
     )
 
 
