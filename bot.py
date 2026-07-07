@@ -419,6 +419,106 @@ async def top3(
         "💌 Ton Top 3 a été publié dans #top-des-lecteurs !",
         ephemeral=True
     )
+
+# -----------------------------
+# MODIFIER SON TOP 3
+# -----------------------------
+
+@bot.tree.command(
+    name="update_top3",
+    description="Modifier ton top 3 de livres préférés"
+)
+@app_commands.describe(
+    livre1="Ton nouveau livre préféré",
+    livre2="Ton nouveau deuxième livre préféré",
+    livre3="Ton nouveau troisième livre préféré"
+)
+async def update_top3(
+    interaction: discord.Interaction,
+    livre1: str,
+    livre2: str,
+    livre3: str
+):
+
+    user_id = str(interaction.user.id)
+    username = interaction.user.name
+    date = datetime.now().strftime("%d/%m/%Y")
+
+    # Vérifie si un top existe déjà
+    c.execute(
+        "SELECT COUNT(*) FROM top3 WHERE user_id = ?",
+        (user_id,)
+    )
+
+    existe = c.fetchone()[0]
+
+    if existe == 0:
+        await interaction.response.send_message(
+            "⚠️ Tu n'as pas encore créé de Top 3.\n"
+            "Utilise d'abord la commande `/top3`.",
+            ephemeral=True
+        )
+        return
+
+    # Supprime l'ancien top
+    c.execute(
+        "DELETE FROM top3 WHERE user_id = ?",
+        (user_id,)
+    )
+
+    livres = [
+        (1, livre1),
+        (2, livre2),
+        (3, livre3)
+    ]
+
+    # Enregistre le nouveau top
+    for place, livre in livres:
+        c.execute(
+            """
+            INSERT INTO top3
+            (user_id, username, place, book, date)
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            (
+                user_id,
+                username,
+                place,
+                livre,
+                date
+            )
+        )
+
+    conn.commit()
+
+    podium = (
+        "```text\n"
+        "              🥇\n"
+        f"           {livre1}\n\n"
+        f"🥈 {livre2}        🥉 {livre3}\n"
+        "```"
+    )
+
+    embed = discord.Embed(
+        title=f"💌 Top 3 mis à jour de {interaction.user.name}",
+        description=(
+            f"{podium}\n"
+            f"📅 Mis à jour le {date}"
+        ),
+        color=discord.Color.gold()
+    )
+
+    TOP3_CHANNEL_ID = 1524038773955100742
+
+    channel = bot.get_channel(TOP3_CHANNEL_ID)
+
+    if channel is not None:
+        await channel.send(embed=embed)
+
+    await interaction.response.send_message(
+        "💌 Ton Top 3 a été mis à jour dans #top-des-lecteurs !",
+        ephemeral=True
+    )
     
 # -----------------------------
 # LANCEMENT
