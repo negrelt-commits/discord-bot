@@ -239,7 +239,71 @@ async def classement(interaction: discord.Interaction):
 
     await interaction.response.send_message(embed=embed)
 
+# -----------------------------
+# INITIALISER SON HISTORIQUE
+# -----------------------------
 
+@bot.tree.command(
+    name="update_books",
+    description="Met à jour ton nombre de livres déjà lus avant ton arrivée"
+)
+@app_commands.describe(nombre="Nombre de livres déjà lus")
+async def update_books(interaction: discord.Interaction, nombre: int):
+
+    user_id = str(interaction.user.id)
+    username = interaction.user.name
+
+    # Vérifie si la personne a déjà ajouté un historique
+    c.execute(
+        """
+        SELECT COUNT(*) FROM books
+        WHERE user_id = ?
+        """,
+        (user_id,)
+    )
+
+    existant = c.fetchone()[0]
+
+
+    if existant > 0:
+        await interaction.response.send_message(
+            "⚠️ Ton historique de lecture est déjà configuré. "
+            "Contacte un administrateur si tu dois le modifier.",
+            ephemeral=True
+        )
+        return
+
+
+    # Ajoute des livres fictifs pour créer le compteur
+    for i in range(nombre):
+        c.execute(
+            """
+            INSERT INTO books (user_id, username, title, date)
+            VALUES (?, ?, ?, ?)
+            """,
+            (
+                user_id,
+                username,
+                "Livre lu avant l'arrivée",
+                "Avant Discord"
+            )
+        )
+
+    conn.commit()
+
+
+    embed = discord.Embed(
+        title="📚 Historique ajouté !",
+        description=(
+            f"{interaction.user.mention}, ton ancienne bibliothèque a été prise en compte.\n\n"
+            f"📖 Total enregistré : **{nombre} livres lus**\n\n"
+            "Bienvenue parmi les lecteurs 📚✨"
+        )
+    )
+
+
+    await interaction.response.send_message(embed=embed)
+    
 # -----------------------------
 # LANCEMENT
 # -----------------------------
