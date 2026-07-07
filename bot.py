@@ -44,9 +44,15 @@ conn.commit()
 
 @bot.event
 async def on_ready():
-    synced = await bot.tree.sync()
-    print(f"Connecté en tant que {bot.user}")
-    print(f"{len(synced)} commandes synchronisées")
+    print("🔄 Bot connecté, synchronisation en cours...")
+
+    try:
+        synced = await bot.tree.sync()
+        print(f"✅ Connecté en tant que {bot.user}")
+        print(f"✅ {len(synced)} commandes synchronisées")
+
+    except Exception as e:
+        print(f"❌ Erreur synchronisation : {e}")
 
 
 # -----------------------------
