@@ -147,13 +147,13 @@ async def profil(interaction: discord.Interaction):
     dernier_livre = dernier[0] if dernier else "Aucun"
 
     if total < 5:
-        niveau = "🐚 Baby lectrice"
+        niveau = "🐚 Premières pages"
 
     elif total < 20:
-        niveau = "🌊 Dévoreuse de livre"
+        niveau = "🌊 Nouveaux chapitres"
 
     elif total < 50:
-        niveau = "🪸 Lectrice passionée"
+        niveau = "🪸 Etagère bien remplie"
 
     elif total < 100:
         niveau = "🐙 Bibliothéquaire"
