@@ -52,9 +52,9 @@ async def on_ready():
 # AJOUTER UN LIVRE
 # -----------------------------
 
-@bot.tree.command(name="lu", description="Ajoute un livre terminé à ta bibliothèque")
+@bot.tree.command(name="read", description="Ajoute un livre terminé à ta bibliothèque")
 @app_commands.describe(titre="Nom du livre terminé")
-async def lu(interaction: discord.Interaction, titre: str):
+async def read(interaction: discord.Interaction, titre: str):
 
     user_id = str(interaction.user.id)
     username = interaction.user.name
@@ -157,8 +157,8 @@ async def profil(interaction: discord.Interaction):
 # BIBLIOTHÈQUE
 # -----------------------------
 
-@bot.tree.command(name="bibliotheque", description="Voir tes derniers livres lus")
-async def bibliotheque(interaction: discord.Interaction):
+@bot.tree.command(name="library", description="Voir tes derniers livres lus")
+async def library(interaction: discord.Interaction):
 
     user_id = str(interaction.user.id)
 
