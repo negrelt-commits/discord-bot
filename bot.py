@@ -21,7 +21,7 @@ conn.commit()
 
 # ➕ ajouter un livre
 @bot.command()
-async def add(ctx):
+async def books(ctx):
     user_id = str(ctx.author.id)
 
     c.execute("SELECT count FROM books WHERE user_id = ?", (user_id,))
@@ -40,7 +40,7 @@ async def add(ctx):
 
 # 📊 total utilisateur
 @bot.command()
-async def total(ctx):
+async def library(ctx):
     user_id = str(ctx.author.id)
 
     c.execute("SELECT count FROM books WHERE user_id = ?", (user_id,))
