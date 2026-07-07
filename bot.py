@@ -401,14 +401,20 @@ async def top3(
         )
 
 
-        conn.commit()
+            conn.commit()
+
+    podium = (
+        "```text\n"
+        "              🥇\n"
+        f"           {livre1}\n\n"
+        f"🥈 {livre2}        🥉 {livre3}\n"
+        "```"
+    )
 
     embed = discord.Embed(
-        title=f"💌 TOP 3 DE {interaction.user.name}",
+        title=f"💌 Top 3 de {interaction.user.name}",
         description=(
-            f"🥇 **{livre1}**\n\n"
-            f"🥈 **{livre2}**\n\n"
-            f"🥉 **{livre3}**\n\n"
+            f"{podium}\n"
             f"📅 Ajouté le {date}"
         ),
         color=discord.Color.gold()
