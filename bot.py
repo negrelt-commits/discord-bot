@@ -35,6 +35,17 @@ CREATE TABLE IF NOT EXISTS books (
 )
 """)
 
+c.execute("""
+CREATE TABLE IF NOT EXISTS top3 (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id TEXT,
+    username TEXT,
+    place INTEGER,
+    book TEXT,
+    date TEXT
+)
+""")
+
 conn.commit()
 
 
@@ -313,6 +324,100 @@ async def update_books(interaction: discord.Interaction, nombre: int):
 
 
     await interaction.response.send_message(embed=embed)
+
+# -----------------------------
+# TOP 3 LIVRES
+# -----------------------------
+
+@bot.tree.command(
+    name="top3",
+    description="Créer ton top 3 de livres préférés"
+)
+@app_commands.describe(
+    livre1="Ton livre préféré",
+    livre2="Ton deuxième livre préféré",
+    livre3="Ton troisième livre préféré"
+)
+async def top3(
+    interaction: discord.Interaction,
+    livre1: str,
+    livre2: str,
+    livre3: str
+):
+
+    user_id = str(interaction.user.id)
+    username = interaction.user.name
+    date = datetime.now().strftime("%d/%m/%Y")
+
+
+    # Vérifie si un top existe déjà
+    c.execute(
+        "SELECT COUNT(*) FROM top3 WHERE user_id = ?",
+        (user_id,)
+    )
+
+    existe = c.fetchone()[0]
+
+
+    if existe > 0:
+        await interaction.response.send_message(
+            "⚠️ Tu as déjà enregistré ton Top 3.\n"
+            "Une commande de modification pourra être ajoutée plus tard.",
+            ephemeral=True
+        )
+        return
+
+
+    livres = [
+        (1, livre1),
+        (2, livre2),
+        (3, livre3)
+    ]
+
+
+    for place, livre in livres:
+        c.execute(
+            """
+            INSERT INTO top3
+            (user_id, username, place, book, date)
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            (
+                user_id,
+                username,
+                place,
+                livre,
+                date
+            )
+        )
+
+
+    conn.commit()
+
+
+    embed = discord.Embed(
+        title=f"💌 TOP 3 DE {interaction.user.name}",
+        description=(
+            f"🥇 **{livre1}**\n\n"
+            f"🥈 **{livre2}**\n\n"
+            f"🥉 **{livre3}**\n\n"
+            f"📅 Ajouté le {date}"
+        ),
+        color=discord.Color.gold()
+    )
+
+
+    TOP3_CHANNEL_ID = 1524038773955100742
+
+channel = bot.get_channel(TOP3_CHANNEL_ID)
+
+if channel is not None:
+    await channel.send(embed=embed)
+
+await interaction.response.send_message(
+    "💌 Ton Top 3 a été publié dans #top-des-lectures !",
+    ephemeral=True
+)
     
 # -----------------------------
 # LANCEMENT
